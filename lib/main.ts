@@ -50,12 +50,9 @@ export async function activate(context: ExecutionActivationContext) {
 	);
 
 	const unsubPromises = [
-		papi.commands.registerCommand(
-			"paratext-text-collection.do-stuff",
-			(message: string) => {
-				return `Text collection: ${message}`;
-			}
-		),
+		papi.commands.registerCommand("test.echo", (message: string) => {
+			return `Text collection: ${message}`;
+		}),
 	];
 
 	// Create webviews or get an existing webview if one already exists for this type
