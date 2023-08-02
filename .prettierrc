@@ -2,13 +2,5 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "endOfLine": "lf",
-  "singleQuote": true,
-  "overrides": [
-    {
-      "files": [".eslintrc"],
-      "options": {
-        "parser": "json"
-      }
-    }
-  ]
+  "singleQuote": true
 }

@@ -1,10 +1,8 @@
 import papi from 'papi-backend';
-// @ts-expect-error ts(1192) this file has no default export; the text is exported by rollup
-import textCollectionReact from './paratext-text-collection.web-view';
+import textCollectionReact from './paratext-text-collection.web-view?inline';
 import textCollectionReactStyles from './paratext-text-collection.web-view.scss?inline';
 import type { SavedWebViewDefinition, WebViewDefinition } from 'shared/data/web-view.model';
 import { ExecutionActivationContext } from 'extension-host/extension-types/extension-activation-context.model';
-import { UnsubscriberAsync } from 'shared/utils/papi-util';
 import type { IWebViewProvider } from 'shared/models/web-view-provider.model';
 
 const {
@@ -12,11 +10,11 @@ const {
   dataProvider: { DataProviderEngine },
 } = papi;
 
-console.log(import.meta.env.PROD);
+console.log(process.env.NODE_ENV);
 
 logger.info('Text collection extension is importing!');
 
-const reactWebViewType = 'paratext-text-collection.react';
+const reactWebViewType = 'paratextTextCollection.react';
 
 /**
  * Simple web view provider that provides React web views when papi requests them
@@ -44,27 +42,18 @@ export async function activate(context: ExecutionActivationContext) {
     reactWebViewProvider,
   );
 
-  const unsubPromises = [
-    papi.commands.registerCommand('test.echo', (message: string) => {
-      return `Text collection: ${message}`;
-    }),
-  ];
-
-  // Create webviews or get an existing webview if one already exists for this type
-  // Note: here, we are using `existingId: '?'` to indicate we do not want to create a new webview
-  // if one already exists. The webview that already exists could have been created by anyone
-  // anywhere; it just has to match `webViewType`. See `paranext-core's hello-someone.ts` for an example of keeping
-  // an existing webview that was specifically created by `paranext-core's hello-someone`.
+  // Create WebViews or get an existing WebView if one already exists for this type
+  // Note: here, we are using `existingId: '?'` to indicate we do not want to create a new WebView
+  // if one already exists. The WebView that already exists could have been created by anyone
+  // anywhere; it just has to match `webViewType`. See `paranext-core's hello-someone.ts` for an
+  // example of keeping an existing WebView that was specifically created by
+  // `paranext-core's hello-someone`.
   papi.webViews.getWebView(reactWebViewType, undefined, { existingId: '?' });
 
-  // For now, let's just make things easy and await the data provider promise at the end so we don't hold everything else up
-  const reactWebViewProviderResolved = await reactWebViewProviderPromise;
+  // Await the data provider promise at the end so we don't hold everything else up
+  context.registrations.add(await reactWebViewProviderPromise);
 
-  const combinedUnsubscriber: UnsubscriberAsync = papi.util.aggregateUnsubscriberAsyncs(
-    (await Promise.all(unsubPromises)).concat([reactWebViewProviderResolved.dispose]),
-  );
   logger.info('Text collection extension is finished activating!');
-  return combinedUnsubscriber;
 }
 
 export async function deactivate() {

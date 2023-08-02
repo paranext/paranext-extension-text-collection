@@ -1,7 +1,8 @@
 import papi from 'papi-frontend';
 import { useEffect, useMemo, useState } from 'react';
-import { UsfmProviderDataTypes } from 'extension-types';
+import { UsfmDataProvider, UsfmProviderDataTypes } from 'usfm-data-provider';
 import { Button, RefSelector, ScriptureReference } from 'papi-components';
+import { VerseRef } from '@sillsdev/scripture';
 
 const {
   react: {
@@ -20,29 +21,22 @@ globalThis.webViewComponent = function () {
   const [expandedResourceName, setExpandedResourceName] = useState<string | undefined>('');
   const [titleBarText, setTitleBarText] = useState('');
 
+  let ref: VerseRef = new VerseRef();
+  ref.bookNum;
+
   const [resourceText] = useData.Verse<UsfmProviderDataTypes, 'Verse'>(
     'usfm',
-    useMemo(
-      () => ({
-        _bookNum: scrRef.bookNum,
-        _chapterNum: scrRef.chapterNum,
-        _verseNum: scrRef.verseNum,
-      }),
-      [scrRef],
-    ),
+    useMemo(() => {
+      return new VerseRef(scrRef.bookNum, scrRef.chapterNum, scrRef.verseNum);
+    }, [scrRef]),
     'Loading scripture...',
   );
 
   const [fullChapter] = useData.Chapter<UsfmProviderDataTypes, 'Chapter'>(
     'usfm',
-    useMemo(
-      () => ({
-        _bookNum: scrRef.bookNum,
-        _chapterNum: scrRef.chapterNum,
-        _verseNum: 1,
-      }),
-      [scrRef],
-    ),
+    useMemo(() => {
+      return new VerseRef(scrRef.bookNum, scrRef.chapterNum, scrRef.verseNum);
+    }, [scrRef]),
     'Loading full chapter',
   );
 
