@@ -1,6 +1,6 @@
 import papi from 'papi-frontend';
 import { useEffect, useMemo, useState } from 'react';
-import { UsfmDataProvider, UsfmProviderDataTypes } from 'usfm-data-provider';
+import { UsfmProviderDataTypes } from 'usfm-data-provider';
 import { Button, RefSelector, ScriptureReference } from 'papi-components';
 import { VerseRef } from '@sillsdev/scripture';
 
@@ -16,10 +16,7 @@ globalThis.webViewComponent = function () {
     chapterNum: 1,
     verseNum: 1,
   });
-  const [dummyData, setDummyData] =
-    useState<{ resourceName: string; resourceText: string | undefined }[]>();
   const [expandedResourceName, setExpandedResourceName] = useState<string | undefined>('');
-  const [titleBarText, setTitleBarText] = useState('');
 
   let ref: VerseRef = new VerseRef();
   ref.bookNum;
@@ -40,8 +37,8 @@ globalThis.webViewComponent = function () {
     'Loading full chapter',
   );
 
-  useEffect(() => {
-    let dummyArray: {
+  const projectData = useMemo(() => {
+    let textCollectionArray: {
       resourceName: string;
       resourceText: string | undefined;
     }[] = [];
@@ -49,20 +46,20 @@ globalThis.webViewComponent = function () {
     for (let i = 0; i < 3; i++) {
       const resourceName: string = `PRJ${i}`;
 
-      dummyArray.push({ resourceName, resourceText });
+      textCollectionArray.push({ resourceName, resourceText });
     }
 
-    setDummyData(dummyArray);
+    return textCollectionArray;
   }, [resourceText]);
 
-  useEffect(() => {
+  const titleBarText = useMemo(() => {
     let title = '';
-    if (!dummyData) return;
+    if (!projectData) return;
 
-    dummyData.forEach((resource, i) => {
+    projectData.forEach((resource, i) => {
       title += resource.resourceName;
 
-      if (i !== dummyData.length - 1) title += ', ';
+      if (i !== projectData.length - 1) title += ', ';
       else title += ': ';
     });
 
@@ -70,73 +67,47 @@ globalThis.webViewComponent = function () {
 
     title += '(Text Collection)';
 
-    setTitleBarText(title);
-  }, [scrRef, dummyData]);
+    return title;
+  }, [scrRef, projectData]);
 
   const temporaryTitleBarElement = (
     <>
       <p>{titleBarText}</p>
-      <p style={{ borderBottom: '3px solid black' }}>
+      <p className="title-bar">
         <i>This text should go in the title bar of the panel</i>
       </p>
+      <hr />
     </>
   );
 
   const verseView = (
-    <div
-      style={{
-        flex: 1,
-        paddingRight: '10px',
-      }}
-    >
-      {dummyData &&
-        dummyData.length > 0 &&
-        dummyData.map((dummyDataElement, i) => {
-          const isLastComponent = i === dummyData.length - 1;
-          const borderBottomStyle = isLastComponent ? 'none' : '1px solid black';
+    <div className="verse-view">
+      {projectData &&
+        projectData.length > 0 &&
+        projectData.map((dummyDataElement, i) => {
+          const isLastComponent = i === projectData.length - 1;
 
           return (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                borderBottom: borderBottomStyle,
-              }}
-            >
-              <Button onClick={() => setExpandedResourceName(dummyDataElement.resourceName)}>
-                {dummyDataElement.resourceName}
-              </Button>
-              <p style={{ marginLeft: '10px' }}>{dummyDataElement.resourceText}</p>
-            </div>
+            <>
+              <div className="row">
+                <Button onClick={() => setExpandedResourceName(dummyDataElement.resourceName)}>
+                  {dummyDataElement.resourceName}
+                </Button>
+                <p className="text">{dummyDataElement.resourceText}</p>
+              </div>
+              {!isLastComponent && <hr />}
+            </>
           );
         })}
     </div>
   );
 
-  const fullChapterView = (
-    <div
-      style={{
-        flex: 1,
-        borderLeft: '1px solid black',
-        paddingLeft: '10px',
-        position: 'relative',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 10,
-        }}
-      >
+  const fullChapterView = () => (
+    <div className="full-chapter-view">
+      <div className="position-title">
         <p>{expandedResourceName}</p>
       </div>
-      <div
-        style={{
-          position: 'absolute',
-          right: 0,
-        }}
-      >
+      <div className="position-button">
         <Button
           onClick={() => {
             setExpandedResourceName('');
@@ -145,14 +116,15 @@ globalThis.webViewComponent = function () {
           x
         </Button>
       </div>
-      <p style={{ marginTop: '50px' }}>{fullChapter}</p>
+      <p className="position-text">{fullChapter}</p>
     </div>
   );
 
   const showFullChapter = expandedResourceName && expandedResourceName.length > 0;
 
   const temporaryScriptureReferenceControl = (
-    <div style={{ paddingTop: 20, borderTop: '3px solid black' }}>
+    <>
+      <hr />
       <RefSelector
         handleSubmit={(newScrRef) => {
           setScrRef(newScrRef);
@@ -162,15 +134,15 @@ globalThis.webViewComponent = function () {
       <p>
         <i>This Scripture Reference Selector is used to simulate a 'global' verse reference.</i>
       </p>
-    </div>
+    </>
   );
 
   return (
     <>
       {temporaryTitleBarElement}
-      <div style={{ display: 'flex' }}>
+      <div className="text-collection">
         {verseView}
-        {showFullChapter && fullChapterView}
+        {showFullChapter && fullChapterView()}
       </div>
       {temporaryScriptureReferenceControl}
     </>
