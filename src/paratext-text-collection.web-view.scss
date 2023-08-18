@@ -1,39 +1,38 @@
-.verse-view {
-  flex: 1;
-  padding-right: 10px;
+.text-collection {
+  display: flex;
 
-  .row {
-    display: flex;
-    align-items: center;
+  .verse-view {
+    flex: 1;
+    padding-right: 10px;
 
-    .text {
-      margin-left: 10px;
+    .row {
+      display: flex;
+
+      .text {
+        margin-left: 10px;
+      }
     }
   }
-}
 
-.full-chapter-view {
-  flex: 1;
-  border-left: 1px solid black;
-  padding-left: 10px;
-  position: relative;
+  .full-chapter-view {
+    flex: 1;
+    border-left: 1px solid black;
+    padding-left: 10px;
+    position: relative;
 
-  .position-title {
-    position: absolute;
-    top: 0;
-    left: 10px;
+    .position-title {
+      position: absolute;
+      top: 0;
+      left: 10px;
+    }
+
+    .position-button {
+      position: absolute;
+      right: 0;
+    }
+
+    .position-text {
+      margin-top: 50px;
+    }
   }
-
-  .position-button {
-    position: absolute;
-    right: 0;
-  }
-
-  .position-text {
-    margin-top: 50px;
-  }
-}
-
-.text-collection {
-  display: 'flex';
 }

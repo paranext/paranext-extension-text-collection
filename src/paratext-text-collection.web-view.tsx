@@ -73,7 +73,7 @@ globalThis.webViewComponent = function () {
   const temporaryTitleBarElement = (
     <>
       <p>{titleBarText}</p>
-      <p className="title-bar">
+      <p>
         <i>This text should go in the title bar of the panel</i>
       </p>
       <hr />
