@@ -6,16 +6,14 @@ import { VerseRef } from '@sillsdev/scripture';
 
 const {
   react: {
-    hooks: { useData },
+    hooks: { useData, useSetting },
   },
 } = papi;
 
+const defaultScrRef = new VerseRef(1, 1, 1);
+
 globalThis.webViewComponent = function () {
-  const [scrRef, setScrRef] = useState<ScriptureReference>({
-    bookNum: 1,
-    chapterNum: 1,
-    verseNum: 1,
-  });
+  const [scrRef, setScrRef] = useSetting('platform.verseRef', defaultScrRef);
   const [expandedResourceName, setExpandedResourceName] = useState<string | undefined>('');
 
   let ref: VerseRef = new VerseRef();
@@ -24,7 +22,7 @@ globalThis.webViewComponent = function () {
   const [resourceText] = useData.Verse<UsfmProviderDataTypes, 'Verse'>(
     'usfm',
     useMemo(() => {
-      return new VerseRef(scrRef.bookNum, scrRef.chapterNum, scrRef.verseNum);
+      return new VerseRef(scrRef!.bookNum, scrRef!.chapterNum, scrRef!.verseNum);
     }, [scrRef]),
     'Loading scripture...',
   );
@@ -32,7 +30,7 @@ globalThis.webViewComponent = function () {
   const [fullChapter] = useData.Chapter<UsfmProviderDataTypes, 'Chapter'>(
     'usfm',
     useMemo(() => {
-      return new VerseRef(scrRef.bookNum, scrRef.chapterNum, scrRef.verseNum);
+      return new VerseRef(scrRef!.bookNum, scrRef!.chapterNum, scrRef!.verseNum);
     }, [scrRef]),
     'Loading full chapter',
   );
@@ -63,7 +61,7 @@ globalThis.webViewComponent = function () {
       else title += ': ';
     });
 
-    title += scrRef.bookNum + ' ' + scrRef.chapterNum + ':' + scrRef.verseNum + ' ';
+    title += scrRef!.bookNum + ' ' + scrRef!.chapterNum + ':' + scrRef!.verseNum + ' ';
 
     title += '(Text Collection)';
 
@@ -127,7 +125,7 @@ globalThis.webViewComponent = function () {
       <hr />
       <RefSelector
         handleSubmit={(newScrRef) => {
-          setScrRef(newScrRef);
+          setScrRef(new VerseRef(newScrRef.bookNum, newScrRef.chapterNum, newScrRef.verseNum));
         }}
         scrRef={scrRef as ScriptureReference}
       />
