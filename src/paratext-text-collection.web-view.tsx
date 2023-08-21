@@ -13,7 +13,7 @@ const {
 const defaultScrRef = new VerseRef(1, 1, 1);
 
 globalThis.webViewComponent = function () {
-  const [scrRef, setScrRef] = useSetting('globalVerseRef', defaultScrRef);
+  const [scrRef, setScrRef] = useSetting('platform.verseRef', defaultScrRef);
   const [expandedResourceName, setExpandedResourceName] = useState<string | undefined>('');
 
   let ref: VerseRef = new VerseRef();
