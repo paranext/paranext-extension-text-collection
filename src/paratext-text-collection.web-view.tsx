@@ -10,19 +10,26 @@ const {
   },
 } = papi;
 
-const defaultScrRef = new VerseRef(1, 1, 1);
+const defaultScrRef: ScriptureReference = { bookNum: 1, chapterNum: 1, verseNum: 1 };
 
 globalThis.webViewComponent = function () {
   const [scrRef, setScrRef] = useSetting('platform.verseRef', defaultScrRef);
   const [expandedResourceName, setExpandedResourceName] = useState<string | undefined>('');
 
-  let ref: VerseRef = new VerseRef();
-  ref.bookNum;
+  const getResourceVerseRef = (scrRef: ScriptureReference) => {
+    let resourceVerseRef: VerseRef;
+    if (scrRef) {
+      resourceVerseRef = new VerseRef(scrRef.bookNum, scrRef.chapterNum, scrRef.verseNum);
+    } else {
+      resourceVerseRef = new VerseRef(1, 1, 1);
+    }
+    return resourceVerseRef;
+  };
 
   const [resourceText] = useData.Verse<UsfmProviderDataTypes, 'Verse'>(
     'usfm',
     useMemo(() => {
-      return new VerseRef(scrRef!.bookNum, scrRef!.chapterNum, scrRef!.verseNum);
+      return getResourceVerseRef(scrRef as ScriptureReference);
     }, [scrRef]),
     'Loading scripture...',
   );
@@ -30,7 +37,7 @@ globalThis.webViewComponent = function () {
   const [fullChapter] = useData.Chapter<UsfmProviderDataTypes, 'Chapter'>(
     'usfm',
     useMemo(() => {
-      return new VerseRef(scrRef!.bookNum, scrRef!.chapterNum, scrRef!.verseNum);
+      return getResourceVerseRef(scrRef as ScriptureReference);
     }, [scrRef]),
     'Loading full chapter',
   );
@@ -52,7 +59,7 @@ globalThis.webViewComponent = function () {
 
   const titleBarText = useMemo(() => {
     let title = '';
-    if (!projectData) return;
+    if (!projectData || !scrRef) return;
 
     projectData.forEach((resource, i) => {
       title += resource.resourceName;
@@ -61,7 +68,7 @@ globalThis.webViewComponent = function () {
       else title += ': ';
     });
 
-    title += scrRef!.bookNum + ' ' + scrRef!.chapterNum + ':' + scrRef!.verseNum + ' ';
+    title += scrRef.bookNum + ' ' + scrRef.chapterNum + ':' + scrRef.verseNum + ' ';
 
     title += '(Text Collection)';
 
