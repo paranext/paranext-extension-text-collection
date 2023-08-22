@@ -10,21 +10,21 @@ const {
   },
 } = papi;
 
+const getResourceVerseRef = (scrRef: ScriptureReference) => {
+  let resourceVerseRef: VerseRef;
+  if (scrRef) {
+    resourceVerseRef = new VerseRef(scrRef.bookNum, scrRef.chapterNum, scrRef.verseNum);
+  } else {
+    resourceVerseRef = new VerseRef(1, 1, 1);
+  }
+  return resourceVerseRef;
+};
+
 const defaultScrRef: ScriptureReference = { bookNum: 1, chapterNum: 1, verseNum: 1 };
 
 globalThis.webViewComponent = function () {
   const [scrRef, setScrRef] = useSetting('platform.verseRef', defaultScrRef);
   const [expandedResourceName, setExpandedResourceName] = useState<string | undefined>('');
-
-  const getResourceVerseRef = (scrRef: ScriptureReference) => {
-    let resourceVerseRef: VerseRef;
-    if (scrRef) {
-      resourceVerseRef = new VerseRef(scrRef.bookNum, scrRef.chapterNum, scrRef.verseNum);
-    } else {
-      resourceVerseRef = new VerseRef(1, 1, 1);
-    }
-    return resourceVerseRef;
-  };
 
   const [resourceText] = useData.Verse<UsfmProviderDataTypes, 'Verse'>(
     'usfm',
