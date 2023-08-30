@@ -23,7 +23,7 @@ const getResourceVerseRef = (scrRef: ScriptureReference) => {
 const defaultScrRef: ScriptureReference = { bookNum: 1, chapterNum: 1, verseNum: 1 };
 
 globalThis.webViewComponent = function () {
-  const [scrRef, setScrRef] = useSetting('platform.verseRef', defaultScrRef);
+  const [scrRef] = useSetting('platform.verseRef', defaultScrRef);
   const [expandedResourceName, setExpandedResourceName] = useState<string | undefined>('');
 
   const [resourceText] = useData.Verse<UsfmProviderDataTypes, 'Verse'>(
@@ -127,21 +127,6 @@ globalThis.webViewComponent = function () {
 
   const showFullChapter = expandedResourceName && expandedResourceName.length > 0;
 
-  const temporaryScriptureReferenceControl = (
-    <>
-      <hr />
-      <RefSelector
-        handleSubmit={(newScrRef) => {
-          setScrRef(new VerseRef(newScrRef.bookNum, newScrRef.chapterNum, newScrRef.verseNum));
-        }}
-        scrRef={scrRef as ScriptureReference}
-      />
-      <p>
-        <i>This Scripture Reference Selector is used to simulate a 'global' verse reference.</i>
-      </p>
-    </>
-  );
-
   return (
     <>
       {temporaryTitleBarElement}
@@ -149,7 +134,6 @@ globalThis.webViewComponent = function () {
         {verseView}
         {showFullChapter && fullChapterView()}
       </div>
-      {temporaryScriptureReferenceControl}
     </>
   );
 };
