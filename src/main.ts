@@ -26,8 +26,8 @@ const reactWebViewProvider: IWebViewProvider = {
         `${reactWebViewType} provider received request to provide a ${savedWebView.webViewType} web view`,
       );
     return {
-      ...savedWebView,
       title: 'Text Collection',
+      ...savedWebView,
       content: textCollectionReact,
       styles: textCollectionReactStyles,
     };
