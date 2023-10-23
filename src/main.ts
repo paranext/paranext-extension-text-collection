@@ -1,6 +1,6 @@
 import papi from 'papi-backend';
-import textCollectionReact from './paratext-text-collection.web-view?inline';
-import textCollectionReactStyles from './paratext-text-collection.web-view.scss?inline';
+import textCollectionReact from './web-views/paratext-text-collection.web-view?inline';
+import textCollectionReactStyles from './web-views/paratext-text-collection.web-view.scss?inline';
 import type { SavedWebViewDefinition, WebViewDefinition } from 'shared/data/web-view.model';
 import { ExecutionActivationContext } from 'extension-host/extension-types/extension-activation-context.model';
 import type { IWebViewProvider } from 'shared/models/web-view-provider.model';

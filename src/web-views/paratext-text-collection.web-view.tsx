@@ -1,6 +1,6 @@
 import papi from 'papi-frontend';
 import { useEffect, useMemo, useState } from 'react';
-import { UsfmProviderDataTypes } from 'usfm-data-provider';
+import type { UsfmProviderDataTypes } from 'usfm-data-provider';
 import { Button, ScriptureReference } from 'papi-components';
 import { VerseRef } from '@sillsdev/scripture';
 import type { WebViewProps } from 'shared/data/web-view.model';
