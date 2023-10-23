@@ -1,8 +1,9 @@
 import papi from 'papi-frontend';
 import { useEffect, useMemo, useState } from 'react';
 import { UsfmProviderDataTypes } from 'usfm-data-provider';
-import { Button, RefSelector, ScriptureReference } from 'papi-components';
+import { Button, ScriptureReference } from 'papi-components';
 import { VerseRef } from '@sillsdev/scripture';
+import type { WebViewProps } from 'shared/data/web-view.model';
 
 const {
   react: {
@@ -22,23 +23,22 @@ const getResourceVerseRef = (scrRef: ScriptureReference) => {
 
 const defaultScrRef: ScriptureReference = { bookNum: 1, chapterNum: 1, verseNum: 1 };
 
-globalThis.webViewComponent = function () {
-  const [scrRef] = useSetting('platform.verseRef', defaultScrRef);
+globalThis.webViewComponent = function TextCollectionWebView({
+  updateWebViewDefinition,
+}: WebViewProps) {
   const [expandedResourceName, setExpandedResourceName] = useState<string | undefined>('');
+  const [scrRef] = useSetting('platform.verseRef', defaultScrRef);
+  const verseRef = useMemo(() => getResourceVerseRef(scrRef), [scrRef]);
 
   const [resourceText] = useData.Verse<UsfmProviderDataTypes, 'Verse'>(
     'usfm',
-    useMemo(() => {
-      return getResourceVerseRef(scrRef as ScriptureReference);
-    }, [scrRef]),
+    verseRef,
     'Loading scripture...',
   );
 
   const [fullChapter] = useData.Chapter<UsfmProviderDataTypes, 'Chapter'>(
     'usfm',
-    useMemo(() => {
-      return getResourceVerseRef(scrRef as ScriptureReference);
-    }, [scrRef]),
+    verseRef,
     'Loading full chapter',
   );
 
@@ -57,9 +57,10 @@ globalThis.webViewComponent = function () {
     return textCollectionArray;
   }, [resourceText]);
 
-  const titleBarText = useMemo(() => {
+  // Keep the title up-to-date
+  useEffect(() => {
     let title = '';
-    if (!projectData || !scrRef) return;
+    if (!projectData || !verseRef) return;
 
     projectData.forEach((resource, i) => {
       title += resource.resourceName;
@@ -68,22 +69,12 @@ globalThis.webViewComponent = function () {
       else title += ': ';
     });
 
-    title += scrRef.bookNum + ' ' + scrRef.chapterNum + ':' + scrRef.verseNum + ' ';
+    title += verseRef.toString();
 
-    title += '(Text Collection)';
+    title += ' (Text Collection)';
 
-    return title;
-  }, [scrRef, projectData]);
-
-  const temporaryTitleBarElement = (
-    <>
-      <p>{titleBarText}</p>
-      <p>
-        <i>This text should go in the title bar of the panel</i>
-      </p>
-      <hr />
-    </>
-  );
+    updateWebViewDefinition({ title });
+  }, [updateWebViewDefinition, verseRef, projectData]);
 
   const verseView = (
     <div className="verse-view">
@@ -128,12 +119,9 @@ globalThis.webViewComponent = function () {
   const showFullChapter = expandedResourceName && expandedResourceName.length > 0;
 
   return (
-    <>
-      {temporaryTitleBarElement}
-      <div className="text-collection">
-        {verseView}
-        {showFullChapter && fullChapterView()}
-      </div>
-    </>
+    <div className="text-collection">
+      {verseView}
+      {showFullChapter && fullChapterView()}
+    </div>
   );
 };
