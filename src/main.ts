@@ -5,10 +5,7 @@ import type { SavedWebViewDefinition, WebViewDefinition } from 'shared/data/web-
 import { ExecutionActivationContext } from 'extension-host/extension-types/extension-activation-context.model';
 import type { IWebViewProvider } from 'shared/models/web-view-provider.model';
 
-const {
-  logger,
-  dataProvider: { DataProviderEngine },
-} = papi;
+const { logger } = papi;
 
 console.log(process.env.NODE_ENV);
 
