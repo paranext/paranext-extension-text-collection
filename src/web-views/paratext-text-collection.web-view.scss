@@ -1,23 +1,67 @@
+%full-height {
+  height: 100%;
+}
+
+html {
+  @extend %full-height;
+
+  overflow: hidden;
+}
+
+body {
+  @extend %full-height;
+
+  margin: 0;
+}
+
+#root {
+  @extend %full-height;
+}
+
 .text-collection {
+  @extend %full-height;
+
   display: flex;
 
+  %view {
+    @extend %full-height;
+
+    overflow-y: auto;
+  }
+
   .verse-view {
+    @extend %view;
+
+    display: flex;
+    flex-direction: column;
     flex: 1;
-    padding-right: 10px;
 
     .row {
       display: flex;
 
       .text {
-        margin-left: 10px;
+        white-space: pre-wrap;
+        margin-inline: 10px;
       }
+    }
+
+    hr {
+      margin-inline: 1em;
+    }
+
+    .select-projects-button {
+      align-self: center;
+      width: 40px;
+      height: 40px;
     }
   }
 
   .full-chapter-view {
+    @extend %view;
+
     flex: 1;
     border-left: 1px solid black;
-    padding-left: 10px;
+    padding-inline: 10px;
     position: relative;
 
     .position-title {
@@ -32,6 +76,7 @@
     }
 
     .position-text {
+      white-space: pre-wrap;
       margin-top: 50px;
     }
   }
