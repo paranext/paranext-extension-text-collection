@@ -1,11 +1,12 @@
 # paranext-extension-template
+
 Basic extension template for Paranext
 
 ## Summary
 
-This is a webpack project template pre-configured to build Paranext extensions.
+This is a webpack project template pre-configured to build Paranext extensions. It contains the bare minimum of what an extension needs. Note that the `*.web-view.*` files and the `public/assets` folder mentioned below are not present in this template. For inspiration on what these could look like, refer to any extension that is built using this template. An example would be the [Text Collection extension](https://github.com/paranext/paranext-extension-text-collection).
 
-- `package.json` contains information about this extension npm package. It is required for Paranext to use the extension properly. It is copied into the build folder
+- `package.json` contains information about this extension's npm package. It is required for Paranext to use the extension properly. It is copied into the build folder
 - `src` contains the source code for the extension
   - `src/main.ts` is the main entry file for the extension
   - `src/types/paranext-extension-template.d.ts` is this extension's types file that defines how other extensions can use this extension through the `papi`. It is copied into the build folder
@@ -30,6 +31,30 @@ In order to interact with `paranext-core`, you must point `package.json` to your
 ### Install dependencies
 
 Run `npm install` to install local and published dependencies
+
+### Configure extension details
+
+This section is a more compact version of the [`Your first extension` guide](https://github.com/paranext/paranext-extension-template/wiki/Your-First-Extension).
+
+#### Search and replace placeholders
+
+- **Search for:** paranext-extension-template
+  **Replace with:** your-extension-name
+- **Search for:** Extension Template
+  **Replace with:** Your Extension
+  (Be sure to match case)
+
+#### Filenames
+
+You need to change the filename of the `.d.ts` file, which is located in `/src/types` and referenced in the `package.json` “types” field. See more information on the [.d.ts files](https://github.com/paranext/paranext-extension-template/wiki/Extension-Anatomy#type-declaration-files-dts).
+
+#### Manifest
+
+The `manifest.json` and `package.json` files makeup your extension manifest. Add your details in these two files based on your extension name and what you renamed the files described in 1 and 2. See more information on the `manifest.json` and `package.json` files in [Extension Anatomy](https://github.com/paranext/paranext-extension-template/wiki/Extension-Anatomy#extension-manifest).
+
+#### Webpack
+
+You will need to add your extension's name into `webpack.config.main.ts` and `webpack.util.ts`. The search and replace actions listed above will correct this for you.
 
 ## To run
 
@@ -56,6 +81,10 @@ To build the extension once:
 To package your extension into a zip file for distribution:
 
 `npm run package`
+
+## To update
+
+The `paranext-extension-template` will be updated regularly, and will sometimes receive updates that help with breaking changes on `paranext-core`. So we recommend you periodically update your extension by merging the latest template updates into your extension. You can do so by following [these instructions](https://github.com/paranext/paranext-extension-template/wiki/Merging-Template-Changes-into-Your-Extension).
 
 ## Special features of the template
 
@@ -87,6 +116,7 @@ This extension template is built by webpack (`webpack.config.ts`) in two steps: 
 #### Build 1: TypeScript WebView bundling
 
 Webpack (`./webpack/webpack.config.web-view.ts`) prepares TypeScript WebViews for use and outputs them into temporary build folders adjacent to the WebView files:
+
 - Formats WebViews to match how they should look to work in Paranext
 - Transpiles React/TypeScript WebViews into JavaScript
 - Bundles dependencies into the WebViews
@@ -95,6 +125,7 @@ Webpack (`./webpack/webpack.config.web-view.ts`) prepares TypeScript WebViews fo
 #### Build 2: Main and final bundling
 
 Webpack (`./webpack/webpack.config.main.ts`) prepares the main extension file and bundles the extension together into the `dist` folder:
+
 - Transpiles the main TypeScript file and its imported modules into JavaScript
 - Injects the bundled WebViews into the main file
 - Bundles dependencies into the main file

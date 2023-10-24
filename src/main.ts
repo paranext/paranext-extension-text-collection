@@ -55,4 +55,5 @@ export async function activate(context: ExecutionActivationContext) {
 
 export async function deactivate() {
   logger.info('Text collection extension is deactivating!');
+  return true;
 }
