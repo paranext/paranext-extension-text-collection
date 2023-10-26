@@ -28,7 +28,7 @@ function VerseDisplay({ projectId, projectMetadata, selectProject, verseRef }: V
   const strippedText = useMemo(() => stripUSFM(usfm), [usfm]);
   return (
     <div className="row">
-      <Button onClick={() => selectProject(projectId)}>{projectMetadata?.name || 'PRJ'}</Button>
+      <Button onClick={() => selectProject(projectId)}>{projectMetadata?.name || '...'}</Button>
       <p className="text">{strippedText}</p>
     </div>
   );

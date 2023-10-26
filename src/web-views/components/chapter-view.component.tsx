@@ -29,7 +29,7 @@ function ChapterView({ projectId, projectMetadata, closeView, verseRef }: Chapte
   return (
     <div className="full-chapter-view">
       <div className="position-title">
-        <p>{projectMetadata?.name || 'PRJ'}</p>
+        <p>{projectMetadata?.name || '...'}</p>
       </div>
       <div className="position-button">
         <Button onClick={closeView}>x</Button>

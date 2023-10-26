@@ -21,6 +21,7 @@ export function getTextCollectionTitle(
 export function stripUSFM(usfm: string | undefined) {
   return usfm
     ?.replace(/\\x .*\\x\*/g, '')
+    .replace(/\\fig .*\\fig\*/g, '')
     .replace(/\\f .*\\f\*/g, '')
     .replace(/\r?\n/g, ' ')
     .replace(/\\p\s+/g, '\n  ')

@@ -29,6 +29,11 @@ body {
     overflow-y: auto;
   }
 
+  %text-display {
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+  }
+
   .verse-view {
     @extend %view;
 
@@ -40,7 +45,7 @@ body {
       display: flex;
 
       .text {
-        white-space: pre-wrap;
+        @extend %text-display;
         margin-inline: 10px;
       }
     }
@@ -76,7 +81,7 @@ body {
     }
 
     .position-text {
-      white-space: pre-wrap;
+        @extend %text-display;
       margin-top: 50px;
     }
   }
