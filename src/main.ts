@@ -1,32 +1,58 @@
 import papi from 'papi-backend';
-import textCollectionReact from './paratext-text-collection.web-view?inline';
-import textCollectionReactStyles from './paratext-text-collection.web-view.scss?inline';
-import type { SavedWebViewDefinition, WebViewDefinition } from 'shared/data/web-view.model';
-import { ExecutionActivationContext } from 'extension-host/extension-types/extension-activation-context.model';
+import type {
+  GetWebViewOptions,
+  SavedWebViewDefinition,
+  WebViewDefinition,
+} from 'shared/data/web-view.model';
 import type { IWebViewProvider } from 'shared/models/web-view-provider.model';
+import type { ExecutionActivationContext } from 'extension-host/extension-types/extension-activation-context.model';
+import type { ProjectMetadata } from 'shared/models/project-metadata.model';
+import { VerseRef } from '@sillsdev/scripture';
+import textCollectionReact from './web-views/paratext-text-collection.web-view?inline';
+import textCollectionReactStyles from './web-views/paratext-text-collection.web-view.scss?inline';
+import { getTextCollectionTitle } from './util';
 
 const { logger } = papi;
 
-console.log(process.env.NODE_ENV);
-
 logger.info('Text collection extension is importing!');
 
-const reactWebViewType = 'paratextTextCollection.react';
+const TEXT_COLLECTION_WEB_VIEW_TYPE = 'paratextTextCollection.react';
 
-/**
- * Simple web view provider that provides React web views when papi requests them
- */
-const reactWebViewProvider: IWebViewProvider = {
-  async getWebView(savedWebView: SavedWebViewDefinition): Promise<WebViewDefinition | undefined> {
-    if (savedWebView.webViewType !== reactWebViewType)
+/** Text collection web view provider - provides Text collection web view when papi asks for it */
+const textCollectionWebViewProvider: IWebViewProvider = {
+  async getWebView(
+    savedWebView: SavedWebViewDefinition,
+    options: GetWebViewOptions & { projectIds: string[] | undefined },
+  ): Promise<WebViewDefinition | undefined> {
+    if (savedWebView.webViewType !== TEXT_COLLECTION_WEB_VIEW_TYPE)
       throw new Error(
-        `${reactWebViewType} provider received request to provide a ${savedWebView.webViewType} web view`,
+        `${TEXT_COLLECTION_WEB_VIEW_TYPE} provider received request to provide a ${savedWebView.webViewType} web view`,
       );
+
+    // Type assert the WebView state since TypeScript doesn't know what type it is
+    // TODO: Fix after https://github.com/paranext/paranext-core/issues/585 is done
+    const projectIds = options.projectIds || (savedWebView.state?.projectIds as string[]) || [];
+
+    let projectsMetadata: ProjectMetadata[] | undefined;
+    try {
+      projectsMetadata = await Promise.all(
+        projectIds.map((projectId) => papi.projectLookup.getMetadataForProject(projectId)),
+      );
+    } catch (e) {
+      logger.error(`Text collection web view provider error: Could not get project metadata: ${e}`);
+    }
+
     return {
-      title: 'Text Collection',
+      title: projectsMetadata
+        ? getTextCollectionTitle(projectsMetadata, new VerseRef(1, 1, 1))
+        : 'Text Collection',
       ...savedWebView,
       content: textCollectionReact,
       styles: textCollectionReactStyles,
+      state: {
+        ...savedWebView.state,
+        projectIds,
+      },
     };
   },
 };
@@ -34,25 +60,41 @@ const reactWebViewProvider: IWebViewProvider = {
 export async function activate(context: ExecutionActivationContext) {
   logger.info('Text collection extension is activating!');
 
-  const reactWebViewProviderPromise = papi.webViewProviders.register(
-    reactWebViewType,
-    reactWebViewProvider,
+  const textCollectionWebViewProviderPromise = papi.webViewProviders.register(
+    TEXT_COLLECTION_WEB_VIEW_TYPE,
+    textCollectionWebViewProvider,
   );
 
-  // Create WebViews or get an existing WebView if one already exists for this type
-  // Note: here, we are using `existingId: '?'` to indicate we do not want to create a new WebView
-  // if one already exists. The WebView that already exists could have been created by anyone
-  // anywhere; it just has to match `webViewType`. See `paranext-core's hello-someone.ts` for an
-  // example of keeping an existing WebView that was specifically created by
-  // `paranext-core's hello-someone`.
-  papi.webViews.getWebView(reactWebViewType, undefined, { existingId: '?' });
+  context.registrations.add(
+    await papi.commands.registerCommand('paratextTextCollection.open', async (projectIds) => {
+      let projectIdsForWebView = projectIds;
 
-  // Await the data provider promise at the end so we don't hold everything else up
-  context.registrations.add(await reactWebViewProviderPromise);
+      // If projectIds weren't passed in, get from dialog
+      if (!projectIdsForWebView) {
+        const userProjectIds = await papi.dialogs.showDialog('platform.selectMultipleProjects', {
+          title: 'Open Text Collection',
+          prompt: 'Please select projects to open in the text collection:',
+        });
+        if (userProjectIds) projectIdsForWebView = userProjectIds;
+      }
+
+      // If the user didn't select a project, return null and don't show the text collection
+      if (!projectIdsForWebView) return null;
+
+      return papi.webViews.getWebView(TEXT_COLLECTION_WEB_VIEW_TYPE, undefined, {
+        projectIds: projectIdsForWebView,
+        // Type assert because GetWebViewOptions is not yet typed to be generic and allow extra inputs
+      } as GetWebViewOptions);
+    }),
+  );
+
+  // Await the web view provider promise at the end so we don't hold everything else up
+  context.registrations.add(await textCollectionWebViewProviderPromise);
 
   logger.info('Text collection extension is finished activating!');
 }
 
 export async function deactivate() {
   logger.info('Text collection extension is deactivating!');
+  return true;
 }
