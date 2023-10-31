@@ -12,20 +12,3 @@ export function getTextCollectionTitle(
     .map((projectMetadata) => projectMetadata.name)
     .join(', ')}: ${verseRef.toString()} (Text Collection)`;
 }
-
-/**
- * Strips USFM markers out and such to transform USFM into plain text
- * @param usfm USFM string
- * @returns plain text string
- */
-export function stripUSFM(usfm: string | undefined) {
-  return usfm
-    ?.replace(/\\x .*\\x\*/g, '')
-    .replace(/\\fig .*\\fig\*/g, '')
-    .replace(/\\f .*\\f\*/g, '')
-    .replace(/\r?\n/g, ' ')
-    .replace(/\\p\s+/g, '\n  ')
-    .replace(/\\(?:id|h|toc\d|mt\d|c|ms\d|mr|s\d|q\d*)\s+/g, '\n')
-    .replace(/\\\S+\s+/g, '')
-    .trim();
-}

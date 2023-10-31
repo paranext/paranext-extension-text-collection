@@ -4,7 +4,6 @@ import { Button } from 'papi-components';
 import type { ProjectMetadata } from 'shared/models/project-metadata.model';
 import type { ProjectDataTypes } from 'papi-shared-types';
 import { useMemo } from 'react';
-import { stripUSFM } from 'src/util';
 
 const {
   react: {
@@ -25,7 +24,6 @@ function ChapterView({ projectId, projectMetadata, closeView, verseRef }: Chapte
     verseRef,
     'Loading',
   );
-  const strippedText = useMemo(() => stripUSFM(usfm), [usfm]);
   return (
     <div className="full-chapter-view">
       <div className="position-title">
@@ -34,7 +32,7 @@ function ChapterView({ projectId, projectMetadata, closeView, verseRef }: Chapte
       <div className="position-button">
         <Button onClick={closeView}>x</Button>
       </div>
-      <p className="position-text">{strippedText}</p>
+      <p className="position-text">{usfm}</p>
     </div>
   );
 }
