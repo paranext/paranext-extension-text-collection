@@ -1,15 +1,8 @@
-import papi from 'papi-frontend';
+import { useProjectData } from 'papi-frontend/react';
 import { VerseRef } from '@sillsdev/scripture';
 import { Button } from 'papi-components';
 import type { ProjectMetadata } from 'shared/models/project-metadata.model';
 import type { ProjectDataTypes } from 'papi-shared-types';
-import { useMemo } from 'react';
-
-const {
-  react: {
-    hooks: { useProjectData },
-  },
-} = papi;
 
 export type VerseDisplayProps = {
   projectId: string;
