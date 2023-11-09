@@ -1,4 +1,5 @@
 import papi from 'papi-frontend';
+import { useSetting, usePromise, useDialogCallback } from 'papi-frontend/react';
 import { Fragment, useCallback, useEffect, useMemo } from 'react';
 import { IconButton, ScriptureReference } from 'papi-components';
 import { VerseRef } from '@sillsdev/scripture';
@@ -7,12 +8,6 @@ import type { ProjectMetadata } from 'shared/models/project-metadata.model';
 import { getTextCollectionTitle } from 'src/util';
 import VerseDisplay from './components/verse-display.component';
 import ChapterView from './components/chapter-view.component';
-
-const {
-  react: {
-    hooks: { useSetting, usePromise, useDialogCallback },
-  },
-} = papi;
 
 /** Transforms a ScriptureReference into a VerseRef */
 const getResourceVerseRef = (scrRef: ScriptureReference) => {
@@ -84,7 +79,7 @@ globalThis.webViewComponent = function TextCollectionWebView({
 
   // Add the newly selected project ID
   useEffect(() => {
-    if (selectedProjectIds && !papi.util.deepEqual(selectedProjectIds, projectIds, true))
+    if (selectedProjectIds && !papi.util.deepEqual(selectedProjectIds, projectIds))
       setProjectIds(selectedProjectIds);
   }, [projectIds, setProjectIds, selectedProjectIds]);
 
