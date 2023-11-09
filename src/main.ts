@@ -45,6 +45,7 @@ const textCollectionWebViewProvider: IWebViewProvider = {
         ? getTextCollectionTitle(projectsMetadata, new VerseRef(1, 1, 1))
         : 'Text Collection',
       ...savedWebView,
+      iconUrl: 'papi-extension://paratext-text-collection/assets/Group24.svg',
       content: textCollectionReact,
       styles: textCollectionReactStyles,
       state: {
