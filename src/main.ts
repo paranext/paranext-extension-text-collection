@@ -1,4 +1,4 @@
-import papi from 'papi-backend';
+import papi, { logger } from 'papi-backend';
 import type {
   GetWebViewOptions,
   SavedWebViewDefinition,
@@ -11,8 +11,6 @@ import { VerseRef } from '@sillsdev/scripture';
 import textCollectionReact from './web-views/paratext-text-collection.web-view?inline';
 import textCollectionReactStyles from './web-views/paratext-text-collection.web-view.scss?inline';
 import { getTextCollectionTitle } from './util';
-
-const { logger } = papi;
 
 logger.info('Text collection extension is importing!');
 
