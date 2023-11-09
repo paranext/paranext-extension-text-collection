@@ -64,7 +64,10 @@ globalThis.webViewComponent = function TextCollectionWebView({
   // Keep the title up-to-date
   useEffect(() => {
     const newTitle = getTextCollectionTitle(projectsMetadata, verseRef);
-    if (newTitle) updateWebViewDefinition({ title: newTitle });
+    if (newTitle)
+      updateWebViewDefinition({
+        title: newTitle,
+      });
   }, [updateWebViewDefinition, projectsMetadata, verseRef]);
 
   const [selectedProjectIds, selectProjects] = useDialogCallback(

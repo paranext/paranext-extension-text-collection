@@ -10,5 +10,5 @@ export function getTextCollectionTitle(
   // Type assert projectsMetadata as not containing undefined since we just checked for that
   return `${(projectsMetadata as ProjectMetadata[])
     .map((projectMetadata) => projectMetadata.name)
-    .join(', ')}: ${verseRef.toString()} (Text Collection)`;
+    .join(', ')} (${verseRef.toString()})`;
 }
