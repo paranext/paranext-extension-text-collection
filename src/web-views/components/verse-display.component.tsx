@@ -2,7 +2,6 @@ import { useProjectData } from 'papi-frontend/react';
 import { VerseRef } from '@sillsdev/scripture';
 import { Button } from 'papi-components';
 import type { ProjectMetadata } from 'shared/models/project-metadata.model';
-import type { ProjectDataTypes } from 'papi-shared-types';
 
 export type VerseDisplayProps = {
   projectId: string;
@@ -12,11 +11,7 @@ export type VerseDisplayProps = {
 };
 
 function VerseDisplay({ projectId, projectMetadata, selectProject, verseRef }: VerseDisplayProps) {
-  const [usfm] = useProjectData.VerseUSFM<ProjectDataTypes['ParatextStandard'], 'VerseUSFM'>(
-    projectId,
-    verseRef,
-    'Loading',
-  );
+  const [usfm] = useProjectData('ParatextStandard', projectId).VerseUSFM(verseRef, 'Loading');
   return (
     <div className="row">
       <Button onClick={() => selectProject(projectId)}>{projectMetadata?.name || '...'}</Button>
