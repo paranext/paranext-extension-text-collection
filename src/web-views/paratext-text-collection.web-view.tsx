@@ -79,7 +79,7 @@ globalThis.webViewComponent = function TextCollectionWebView({
 
   // Add the newly selected project ID
   useEffect(() => {
-    if (selectedProjectIds && !papi.util.deepEqual(selectedProjectIds, projectIds))
+    if (selectedProjectIds && !papi.utils.deepEqual(selectedProjectIds, projectIds))
       setProjectIds(selectedProjectIds);
   }, [projectIds, setProjectIds, selectedProjectIds]);
 
