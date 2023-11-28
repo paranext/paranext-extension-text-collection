@@ -30,8 +30,8 @@ body {
   }
 
   %text-display {
-        overflow-wrap: anywhere;
-        white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
   }
 
   .verse-view {
@@ -43,11 +43,14 @@ body {
 
     .row {
       display: flex;
+      justify-content: space-between;
+      margin-inline: 10px;
+    }
 
-      .text {
-        @extend %text-display;
-        margin-inline: 10px;
-      }
+    .text {
+      @extend %text-display;
+      margin-inline: 10px;
+      margin-top: 0px;
     }
 
     hr {
@@ -81,7 +84,7 @@ body {
     }
 
     .position-text {
-        @extend %text-display;
+      @extend %text-display;
       margin-top: 50px;
     }
   }

@@ -1,11 +1,12 @@
 import papi from 'papi-frontend';
 import { useSetting, usePromise, useDialogCallback } from 'papi-frontend/react';
-import { Fragment, useCallback, useEffect, useMemo } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { IconButton, ScriptureReference } from 'papi-components';
 import { VerseRef } from '@sillsdev/scripture';
 import type { WebViewProps } from 'shared/models/web-view.model';
 import type { ProjectMetadata } from 'shared/models/project-metadata.model';
 import { getTextCollectionTitle } from 'src/util';
+import { Divider } from '@mui/material';
 import VerseDisplay from './components/verse-display.component';
 import ChapterView from './components/chapter-view.component';
 
@@ -77,17 +78,49 @@ globalThis.webViewComponent = function TextCollectionWebView({
     ),
   );
 
+  const [isLastActionCloseProject, setIsLastActionCloseProject] = useState<boolean>(false);
+  useEffect(() => {
+    setIsLastActionCloseProject(false);
+  }, [selectedProjectIds]);
+
   // Add the newly selected project ID
   useEffect(() => {
-    if (selectedProjectIds && !papi.utils.deepEqual(selectedProjectIds, projectIds))
+    if (
+      selectedProjectIds &&
+      !isLastActionCloseProject &&
+      !papi.utils.deepEqual([...selectedProjectIds].sort(), [...projectIds].sort())
+    )
       setProjectIds(selectedProjectIds);
-  }, [projectIds, setProjectIds, selectedProjectIds]);
+  }, [projectIds, setProjectIds, selectedProjectIds, isLastActionCloseProject]);
+
+  const moveProjectUpDownHandler = (directionUp: boolean, projectId: string) => {
+    const projectIdsCopy = [...projectIds];
+    const index = projectIdsCopy.findIndex((id) => id === projectId);
+    const newIndex = directionUp ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex > projectIdsCopy.length - 1) return;
+    [projectIdsCopy[index], projectIdsCopy[newIndex]] = [
+      projectIdsCopy[newIndex],
+      projectIdsCopy[index],
+    ];
+    setProjectIds(projectIdsCopy);
+  };
+
+  const closeProjectHandler = (projectId: string) => {
+    const projectIdsCopy = [...projectIds];
+    const index = projectIdsCopy.indexOf(projectId, 0);
+    if (index > -1) {
+      projectIdsCopy.splice(index, 1);
+    }
+    setProjectIds(projectIdsCopy);
+    setIsLastActionCloseProject(true);
+  };
 
   const verseView = (
     <div className="verse-view">
       {projectIds.length > 0 &&
         projectIds.map((projectId, i) => {
-          const isLastComponent = i === projectIds.length - 1;
+          const isFirstProject = i === 0;
+          const isLastProject = i === projectIds.length - 1;
           const projectMetadata = projectsMetadata.find((metadata) => metadata?.id === projectId);
 
           return (
@@ -97,8 +130,12 @@ globalThis.webViewComponent = function TextCollectionWebView({
                 projectMetadata={projectMetadata}
                 selectProject={setExpandedProjectId}
                 verseRef={verseRef}
+                isFirstProject={isFirstProject}
+                isLastProject={isLastProject}
+                onMoveUpDown={moveProjectUpDownHandler}
+                onCloseProject={closeProjectHandler}
               />
-              {!isLastComponent && <hr />}
+              {!isLastProject && <Divider />}
             </Fragment>
           );
         })}
