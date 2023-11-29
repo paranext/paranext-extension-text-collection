@@ -14,6 +14,8 @@ import {
 } from '@mui/icons-material';
 import { useState, MouseEvent } from 'react';
 
+const defaultFontSize: number = 16;
+
 export type VerseDisplayProps = {
   projectId: string;
   projectMetadata: ProjectMetadata | undefined;
@@ -36,6 +38,7 @@ function VerseDisplay({
   onCloseProject,
 }: VerseDisplayProps) {
   const [usfm] = useProjectData('ParatextStandard', projectId).VerseUSFM(verseRef, 'Loading');
+  const [fontSize, setFontSize] = useState<number>(defaultFontSize);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -67,13 +70,26 @@ function VerseDisplay({
               <HighlightOff /> Close Text
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
+            <MenuItem
+              onClick={() => {
+                setFontSize(fontSize + 1);
+              }}
+            >
               <ZoomIn /> Zoom in
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem
+              onClick={() => {
+                setFontSize(fontSize - 1);
+              }}
+            >
               <ZoomOut /> Zoom out
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem
+              onClick={() => {
+                setFontSize(defaultFontSize);
+              }}
+              disabled={fontSize === defaultFontSize}
+            >
               <RestartAlt /> Zoom Reset
             </MenuItem>
             <Divider />
@@ -96,7 +112,9 @@ function VerseDisplay({
           </Menu>
         </div>
       </div>
-      <p className="text">{usfm}</p>
+      <p className="text" style={{ fontSize }}>
+        {usfm}
+      </p>
     </>
   );
 }
