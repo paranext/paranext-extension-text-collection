@@ -129,7 +129,8 @@ globalThis.webViewComponent = function TextCollectionWebView({
               <VerseDisplay
                 projectId={projectId}
                 projectMetadata={projectMetadata}
-                selectProject={setExpandedProjectId}
+                selectedProjectId={expandedProjectId}
+                selectProjectId={setExpandedProjectId}
                 verseRef={verseRef}
                 isFirstProject={isFirstProject}
                 isLastProject={isLastProject}
@@ -165,7 +166,6 @@ globalThis.webViewComponent = function TextCollectionWebView({
             projectMetadata={projectsMetadata.find(
               (metadata) => metadata?.id === expandedProjectId,
             )}
-            closeView={() => setExpandedProjectId('')}
             verseRef={verseRef}
           />
         )}

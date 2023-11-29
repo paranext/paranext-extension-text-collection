@@ -1,6 +1,5 @@
 import { useProjectData } from 'papi-frontend/react';
 import { VerseRef } from '@sillsdev/scripture';
-import { Button } from 'papi-components';
 import type { ProjectMetadata } from 'shared/models/project-metadata.model';
 
 import { Tooltip, IconButton, Menu, MenuItem, Divider } from '@mui/material';
@@ -20,7 +19,8 @@ const defaultFontSize: number = 16;
 export type VerseDisplayProps = {
   projectId: string;
   projectMetadata: ProjectMetadata | undefined;
-  selectProject: (projectId: string) => void;
+  selectedProjectId: string;
+  selectProjectId: (projectId: string) => void;
   verseRef: VerseRef;
   isFirstProject: boolean;
   isLastProject: boolean;
@@ -33,7 +33,8 @@ export type VerseDisplayProps = {
 function VerseDisplay({
   projectId,
   projectMetadata,
-  selectProject,
+  selectedProjectId,
+  selectProjectId,
   verseRef,
   isFirstProject,
   isLastProject,
@@ -54,10 +55,19 @@ function VerseDisplay({
   };
   const open = Boolean(anchorEl);
 
+  const clickHandler = () => {
+    selectProjectId(selectedProjectId !== projectId || selectedProjectId === '' ? projectId : '');
+  };
+
   return (
-    <div className={isSelected ? 'selected' : ''}>
+    <div
+      onClick={clickHandler}
+      className={isSelected ? 'selected' : ''}
+      style={{ cursor: 'pointer' }}
+      aria-hidden="true"
+    >
       <div className="row">
-        <Button onClick={() => selectProject(projectId)}>{projectMetadata?.name || '...'}</Button>
+        <div className="title">{projectMetadata?.name || '...'}</div>
         <div>
           <Tooltip title="More Actions">
             <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>

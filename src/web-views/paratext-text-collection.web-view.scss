@@ -43,6 +43,24 @@ body {
     flex-direction: column;
     flex: 1;
 
+    .title {
+      font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+      font-weight: 500;
+      font-size: 0.875rem;
+      line-height: 1.75;
+      letter-spacing: 0.02857em;
+      text-transform: uppercase;
+      min-width: 64px;
+      padding: 6px 8px;
+      border-radius: 4px;
+
+      transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      color: #336e0b;
+    }
+
     .selected {
       background-color: #eeeeee;
     }
@@ -55,8 +73,8 @@ body {
 
     .text {
       @extend %text-display;
-      margin-inline: 10px;
       margin-top: 0px;
+      margin-inline: 10px;
     }
 
     hr {
