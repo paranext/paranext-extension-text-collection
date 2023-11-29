@@ -134,6 +134,7 @@ globalThis.webViewComponent = function TextCollectionWebView({
                 isLastProject={isLastProject}
                 onMoveUpDown={moveProjectUpDownHandler}
                 onCloseProject={closeProjectHandler}
+                isSelected={projectId === expandedProjectId}
               />
               {!isLastProject && <Divider />}
             </Fragment>

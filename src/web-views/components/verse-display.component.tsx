@@ -25,6 +25,7 @@ export type VerseDisplayProps = {
   isLastProject: boolean;
   onMoveUpDown: (directionUp: boolean, projectId: string) => void;
   onCloseProject: (projectId: string) => void;
+  isSelected: boolean;
 };
 
 function VerseDisplay({
@@ -36,6 +37,7 @@ function VerseDisplay({
   isLastProject,
   onMoveUpDown,
   onCloseProject,
+  isSelected,
 }: VerseDisplayProps) {
   const [usfm] = useProjectData('ParatextStandard', projectId).VerseUSFM(verseRef, 'Loading');
   const [fontSize, setFontSize] = useState<number>(defaultFontSize);
@@ -50,7 +52,7 @@ function VerseDisplay({
   const open = Boolean(anchorEl);
 
   return (
-    <>
+    <div className={isSelected ? 'selected' : ''}>
       <div className="row">
         <Button onClick={() => selectProject(projectId)}>{projectMetadata?.name || '...'}</Button>
         <div>
@@ -115,7 +117,7 @@ function VerseDisplay({
       <p className="text" style={{ fontSize }}>
         {usfm}
       </p>
-    </>
+    </div>
   );
 }
 

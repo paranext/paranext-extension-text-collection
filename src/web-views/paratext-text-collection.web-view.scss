@@ -41,6 +41,10 @@ body {
     flex-direction: column;
     flex: 1;
 
+    .selected {
+      background-color: #eeeeee;
+    }
+
     .row {
       display: flex;
       justify-content: space-between;
