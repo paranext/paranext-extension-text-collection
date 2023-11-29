@@ -53,19 +53,14 @@ function VerseDisplay({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const open = Boolean(anchorEl);
+  const isOpen = !!anchorEl;
 
   const clickHandler = () => {
     selectProjectId(selectedProjectId !== projectId || selectedProjectId === '' ? projectId : '');
   };
 
   return (
-    <div
-      onClick={clickHandler}
-      className={isSelected ? 'selected' : ''}
-      style={{ cursor: 'pointer' }}
-      aria-hidden="true"
-    >
+    <div onClick={clickHandler} className={isSelected ? 'selected' : ''} aria-hidden="true">
       <div className="row">
         <div className="title">{projectMetadata?.name || '...'}</div>
         <div>
@@ -76,7 +71,7 @@ function VerseDisplay({
           </Tooltip>
           <Menu
             anchorEl={anchorEl}
-            open={open}
+            open={isOpen}
             onClose={handleClose}
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}

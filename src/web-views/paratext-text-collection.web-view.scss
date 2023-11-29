@@ -42,6 +42,7 @@ body {
     display: flex;
     flex-direction: column;
     flex: 1;
+    cursor: pointer;
 
     .title {
       font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
