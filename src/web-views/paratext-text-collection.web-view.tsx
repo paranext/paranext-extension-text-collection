@@ -7,6 +7,7 @@ import type { WebViewProps } from 'shared/models/web-view.model';
 import type { ProjectMetadata } from 'shared/models/project-metadata.model';
 import { getTextCollectionTitle } from 'src/util';
 import { Divider } from '@mui/material';
+import { Allotment } from 'allotment';
 import VerseDisplay from './components/verse-display.component';
 import ChapterView from './components/chapter-view.component';
 
@@ -135,6 +136,7 @@ globalThis.webViewComponent = function TextCollectionWebView({
                 onMoveUpDown={moveProjectUpDownHandler}
                 onCloseProject={closeProjectHandler}
                 isSelected={projectId === expandedProjectId}
+                useWebViewState={useWebViewState}
               />
               {!isLastProject && <Divider />}
             </Fragment>
@@ -155,15 +157,19 @@ globalThis.webViewComponent = function TextCollectionWebView({
 
   return (
     <div className="text-collection">
-      {verseView}
-      {showFullChapter && (
-        <ChapterView
-          projectId={expandedProjectId}
-          projectMetadata={projectsMetadata.find((metadata) => metadata?.id === expandedProjectId)}
-          closeView={() => setExpandedProjectId('')}
-          verseRef={verseRef}
-        />
-      )}
+      <Allotment>
+        {verseView}
+        {showFullChapter && (
+          <ChapterView
+            projectId={expandedProjectId}
+            projectMetadata={projectsMetadata.find(
+              (metadata) => metadata?.id === expandedProjectId,
+            )}
+            closeView={() => setExpandedProjectId('')}
+            verseRef={verseRef}
+          />
+        )}
+      </Allotment>
     </div>
   );
 };

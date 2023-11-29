@@ -13,6 +13,7 @@ import {
   VerticalAlignBottom,
 } from '@mui/icons-material';
 import { useState, MouseEvent } from 'react';
+import type { UseWebViewStateHook } from 'shared/models/web-view.model';
 
 const defaultFontSize: number = 16;
 
@@ -26,6 +27,7 @@ export type VerseDisplayProps = {
   onMoveUpDown: (directionUp: boolean, projectId: string) => void;
   onCloseProject: (projectId: string) => void;
   isSelected: boolean;
+  useWebViewState: UseWebViewStateHook;
 };
 
 function VerseDisplay({
@@ -38,9 +40,10 @@ function VerseDisplay({
   onMoveUpDown,
   onCloseProject,
   isSelected,
+  useWebViewState,
 }: VerseDisplayProps) {
   const [usfm] = useProjectData('ParatextStandard', projectId).VerseUSFM(verseRef, 'Loading');
-  const [fontSize, setFontSize] = useState<number>(defaultFontSize);
+  const [fontSize, setFontSize] = useWebViewState<number>(`fontSize_${projectId}`, defaultFontSize);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
