@@ -1,3 +1,5 @@
+@import '../../node_modules/allotment/dist/style';
+
 %full-height {
   height: 100%;
 }
@@ -30,8 +32,8 @@ body {
   }
 
   %text-display {
-        overflow-wrap: anywhere;
-        white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
   }
 
   .verse-view {
@@ -41,17 +43,38 @@ body {
     flex-direction: column;
     flex: 1;
 
-    .row {
-      display: flex;
+    .verse#selected-verse {
+      background-color: #eeeeee;
+    }
+
+    .verse {
+      cursor: pointer;
+
+      .title {
+        font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        font-weight: 500;
+        font-size: 0.875rem;
+        line-height: 1.75;
+        letter-spacing: 0.02857em;
+        text-transform: uppercase;
+        min-width: 64px;
+        padding: 6px 8px;
+        border-radius: 4px;
+
+        color: #336e0b;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        margin-inline: 10px;
+      }
 
       .text {
         @extend %text-display;
+        margin-top: 0px;
         margin-inline: 10px;
       }
-    }
-
-    hr {
-      margin-inline: 1em;
     }
 
     .select-projects-button {
@@ -65,7 +88,6 @@ body {
     @extend %view;
 
     flex: 1;
-    border-left: 1px solid black;
     padding-inline: 10px;
     position: relative;
 
@@ -81,7 +103,7 @@ body {
     }
 
     .position-text {
-        @extend %text-display;
+      @extend %text-display;
       margin-top: 50px;
     }
   }
