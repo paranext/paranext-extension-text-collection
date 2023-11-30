@@ -46,7 +46,7 @@ body {
     .verse {
       cursor: pointer;
 
-      .selected {
+      &.selected {
         background-color: #eeeeee;
       }
 
