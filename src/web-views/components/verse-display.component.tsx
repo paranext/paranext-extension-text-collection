@@ -78,8 +78,7 @@ function VerseDisplay({
   return (
     <div
       onClick={handleDivClick}
-      className="verse"
-      id={isSelected ? 'selected-verse' : ''}
+      className={`verse${isSelected ? ' selected' : ''}`}
       aria-hidden="true"
     >
       <div className="row">
@@ -91,7 +90,7 @@ function VerseDisplay({
             </IconButton>
           </Tooltip>
           <Menu
-            className='context-menu'
+            className="context-menu"
             anchorEl={anchorEl}
             open={isOpen}
             onClose={handleCloseMenu}
