@@ -47,56 +47,77 @@ function VerseDisplay({
   const [fontSize, setFontSize] = useWebViewState<number>(`fontSize_${projectId}`, defaultFontSize);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
+  const handleOpenMenu = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const isOpen = !!anchorEl;
+  const handleCloseMenu = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setAnchorEl(null);
   };
-  const isOpen = !!anchorEl;
+  const handleCloseProject = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    onCloseProject(projectId);
+  };
 
-  const clickHandler = () => {
+  const handleZoom = (event: MouseEvent<HTMLElement>, newFontSize: number) => {
+    event.stopPropagation();
+    setFontSize(newFontSize);
+  };
+  const handleProjectUpDown = (event: MouseEvent<HTMLElement>, isDirectionUp: boolean) => {
+    event.stopPropagation();
+    onMoveUpDown(isDirectionUp, projectId);
+  };
+
+  const handleDivClick = (event: MouseEvent<HTMLElement>) => {
+    event.preventDefault();
     selectProjectId(selectedProjectId !== projectId || selectedProjectId === '' ? projectId : '');
   };
 
   return (
-    <div onClick={clickHandler} className={isSelected ? 'selected' : ''} aria-hidden="true">
+    <div
+      onClick={handleDivClick}
+      className="verse"
+      id={isSelected ? 'selected-verse' : ''}
+      aria-hidden="true"
+    >
       <div className="row">
         <div className="title">{projectMetadata?.name || '...'}</div>
         <div>
           <Tooltip title="More Actions">
-            <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+            <IconButton onClick={handleOpenMenu} size="small" sx={{ ml: 2 }}>
               ...
             </IconButton>
           </Tooltip>
           <Menu
             anchorEl={anchorEl}
             open={isOpen}
-            onClose={handleClose}
+            onClose={handleCloseMenu}
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
-            <MenuItem onClick={() => onCloseProject(projectId)}>
+            <MenuItem onClick={handleCloseProject}>
               <HighlightOff /> Close Text
             </MenuItem>
             <Divider />
             <MenuItem
-              onClick={() => {
-                setFontSize(fontSize + 1);
+              onClick={(event) => {
+                handleZoom(event, fontSize + 1);
               }}
             >
               <ZoomIn /> Zoom in
             </MenuItem>
             <MenuItem
-              onClick={() => {
-                setFontSize(fontSize - 1);
+              onClick={(event) => {
+                handleZoom(event, fontSize - 1);
               }}
             >
               <ZoomOut /> Zoom out
             </MenuItem>
             <MenuItem
-              onClick={() => {
-                setFontSize(defaultFontSize);
+              onClick={(event) => {
+                handleZoom(event, defaultFontSize);
               }}
               disabled={fontSize === defaultFontSize}
             >
@@ -104,16 +125,16 @@ function VerseDisplay({
             </MenuItem>
             <Divider />
             <MenuItem
-              onClick={() => {
-                onMoveUpDown(true, projectId);
+              onClick={(event) => {
+                handleProjectUpDown(event, true);
               }}
               disabled={isFirstProject}
             >
               <VerticalAlignTop /> Move Up
             </MenuItem>
             <MenuItem
-              onClick={() => {
-                onMoveUpDown(false, projectId);
+              onClick={(event) => {
+                handleProjectUpDown(event, false);
               }}
               disabled={isLastProject}
             >

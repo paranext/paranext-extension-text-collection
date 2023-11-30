@@ -64,6 +64,7 @@ globalThis.webViewComponent = function TextCollectionWebView({
     if (newTitle)
       updateWebViewDefinition({
         title: newTitle,
+        tooltip: 'Text',
       });
   }, [updateWebViewDefinition, projectsMetadata, verseRef]);
 
