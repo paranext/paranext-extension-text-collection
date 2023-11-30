@@ -91,6 +91,7 @@ function VerseDisplay({
             </IconButton>
           </Tooltip>
           <Menu
+            className='context-menu'
             anchorEl={anchorEl}
             open={isOpen}
             onClose={handleCloseMenu}
