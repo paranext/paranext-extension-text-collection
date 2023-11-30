@@ -5,7 +5,7 @@ import { IconButton, ScriptureReference } from 'papi-components';
 import { VerseRef } from '@sillsdev/scripture';
 import type { WebViewProps } from 'shared/models/web-view.model';
 import type { ProjectMetadata } from 'shared/models/project-metadata.model';
-import { getTextCollectionTitle } from 'src/util';
+import { getTextCollectionTitle, getTextCollectionTooltip } from 'src/util';
 import { Divider } from '@mui/material';
 import { Allotment } from 'allotment';
 import VerseDisplay from './components/verse-display.component';
@@ -61,9 +61,11 @@ globalThis.webViewComponent = function TextCollectionWebView({
   // Keep the title up-to-date
   useEffect(() => {
     const newTitle = getTextCollectionTitle(projectsMetadata, verseRef);
+    const newTooltip = getTextCollectionTooltip(projectsMetadata);
     if (newTitle)
       updateWebViewDefinition({
         title: newTitle,
+        tooltip: newTooltip,
       });
   }, [updateWebViewDefinition, projectsMetadata, verseRef]);
 
