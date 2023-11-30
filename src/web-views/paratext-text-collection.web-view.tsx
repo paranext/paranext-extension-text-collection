@@ -62,7 +62,7 @@ globalThis.webViewComponent = function TextCollectionWebView({
   useEffect(() => {
     const newTitle = getTextCollectionTitle(projectsMetadata, verseRef);
     const newTooltip = getTextCollectionTooltip(projectsMetadata);
-    if (newTitle)
+    if (newTitle || newTooltip)
       updateWebViewDefinition({
         title: newTitle,
         tooltip: newTooltip,
