@@ -17,8 +17,7 @@ export function getTextCollectionTooltip(projectsMetadata: (ProjectMetadata | un
   if (!projectsMetadata || projectsMetadata.includes(undefined)) return undefined;
 
   // Type assert projectsMetadata as not containing undefined since we just checked for that
-  return `Text Collection\n
-    ${(projectsMetadata as ProjectMetadata[])
-      .map((projectMetadata) => projectMetadata.name)
-      .join('\n')}`;
+  return `Text Collection\n\n${(projectsMetadata as ProjectMetadata[])
+    .map((projectMetadata) => projectMetadata.name)
+    .join('\n')}`;
 }
