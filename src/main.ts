@@ -77,8 +77,8 @@ export async function activate(context: ExecutionActivationContext) {
         if (userProjectIds) projectIdsForWebView = userProjectIds;
       }
 
-      // If the user didn't select a project, return null and don't show the text collection
-      if (!projectIdsForWebView) return null;
+      // If the user didn't select a project, return undefined and don't show the text collection
+      if (!projectIdsForWebView) return undefined;
 
       return papi.webViews.getWebView(TEXT_COLLECTION_WEB_VIEW_TYPE, undefined, {
         projectIds: projectIdsForWebView,

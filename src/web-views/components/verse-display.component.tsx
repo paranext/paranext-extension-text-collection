@@ -45,7 +45,7 @@ function VerseDisplay({
 }: VerseDisplayProps) {
   const [usfm] = useProjectData('ParatextStandard', projectId).VerseUSFM(verseRef, 'Loading');
   const [fontSize, setFontSize] = useWebViewState<number>(`fontSize_${projectId}`, defaultFontSize);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<undefined | HTMLElement>(undefined);
 
   const handleOpenMenu = (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -54,7 +54,7 @@ function VerseDisplay({
   const isOpen = !!anchorEl;
   const handleCloseMenu = (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    setAnchorEl(null);
+    setAnchorEl(undefined);
   };
   const handleCloseProject = (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
