@@ -1,12 +1,12 @@
-import papi, { logger } from 'papi-backend';
+import papi, { logger } from '@papi/backend';
 import type {
+  ExecutionActivationContext,
   GetWebViewOptions,
+  IWebViewProvider,
+  ProjectMetadata,
   SavedWebViewDefinition,
   WebViewDefinition,
-} from 'shared/models/web-view.model';
-import type { IWebViewProvider } from 'shared/models/web-view-provider.model';
-import type { ExecutionActivationContext } from 'extension-host/extension-types/extension-activation-context.model';
-import type { ProjectMetadata } from 'shared/models/project-metadata.model';
+} from '@papi/core';
 import { VerseRef } from '@sillsdev/scripture';
 import textCollectionReact from './web-views/paratext-text-collection.web-view?inline';
 import textCollectionReactStyles from './web-views/paratext-text-collection.web-view.scss?inline';

@@ -69,6 +69,17 @@ module.exports = {
     // Should use our logger anytime you want logs that persist. Otherwise use console only in testing
     'no-console': 'warn',
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['shared/*', 'renderer/*', 'extension-host/*', 'node/*', 'client/*', 'main/*'],
+            message: `Importing from this path is not allowed. Try importing from @papi/core. Imports from paths like 'shared', 'renderer', 'node', 'client' and 'main' are not allowed to prevent unnecessary import break.`,
+          },
+        ],
+      },
+    ],
     'prettier/prettier': ['warn', { tabWidth: 2, trailingComma: 'all' }],
     'react/jsx-indent-props': ['warn', 2],
     'react/jsx-props-no-spreading': ['error', { custom: 'ignore' }],
@@ -80,7 +91,7 @@ module.exports = {
 
     // #region Overrides from paranext-core extension .eslintrc.cjs
 
-    'import/no-unresolved': ['error', { ignore: ['papi'] }],
+    'import/no-unresolved': ['error', { ignore: ['@papi'] }],
 
     // #endregion
   },
