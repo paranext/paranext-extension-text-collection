@@ -1,6 +1,6 @@
-import { useProjectData } from 'papi-frontend/react';
+import { useProjectData } from '@papi/frontend/react';
 import { VerseRef } from '@sillsdev/scripture';
-import type { ProjectMetadata } from 'shared/models/project-metadata.model';
+import { ProjectMetadata } from '@papi/core';
 
 export type ChapterViewProps = {
   projectId: string;

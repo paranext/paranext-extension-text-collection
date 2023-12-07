@@ -1,10 +1,9 @@
-import papi from 'papi-frontend';
-import { useSetting, usePromise, useDialogCallback } from 'papi-frontend/react';
+import papi from '@papi/frontend';
+import { useSetting, usePromise, useDialogCallback } from '@papi/frontend/react';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { IconButton, ScriptureReference } from 'papi-components';
 import { VerseRef } from '@sillsdev/scripture';
-import type { WebViewProps } from 'shared/models/web-view.model';
-import type { ProjectMetadata } from 'shared/models/project-metadata.model';
+import { ProjectMetadata, WebViewProps } from '@papi/core';
 import { getTextCollectionTitle, getTextCollectionTooltip } from 'src/util';
 import { Divider } from '@mui/material';
 import { Allotment } from 'allotment';

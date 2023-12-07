@@ -1,6 +1,6 @@
-import { useProjectData } from 'papi-frontend/react';
+import { useProjectData } from '@papi/frontend/react';
 import { VerseRef } from '@sillsdev/scripture';
-import type { ProjectMetadata } from 'shared/models/project-metadata.model';
+import { ProjectMetadata, UseWebViewStateHook } from '@papi/core';
 
 import { Tooltip, IconButton, Menu, MenuItem, Divider } from '@mui/material';
 import {
@@ -12,7 +12,6 @@ import {
   VerticalAlignBottom,
 } from '@mui/icons-material';
 import { useState, MouseEvent } from 'react';
-import type { UseWebViewStateHook } from 'shared/models/web-view.model';
 
 const defaultFontSize: number = 16;
 
