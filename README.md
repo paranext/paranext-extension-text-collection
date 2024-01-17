@@ -1,6 +1,10 @@
-# paranext-extension-template
+# paranext-extension-text-collection
 
-Basic extension template for Paranext
+View multiple Scripture projects in one view
+
+## This extension has moved
+
+This extension has moved to [`paratext-bible-extensions`](https://github.com/paranext/paratext-bible-extensions). This repository will no longer be updated. Please refer to the [`paratext-bible-text-collection` extension](https://github.com/paranext/paratext-bible-extensions/tree/main/src/paratext-bible-text-collection) in the future.
 
 ## Summary
 
