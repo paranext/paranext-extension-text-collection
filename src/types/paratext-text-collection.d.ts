@@ -12,6 +12,6 @@ declare module 'papi-shared-types' {
      * @returns WebView id for new text collection WebView or `undefined` if the user canceled the
      * dialog
      */
-    'paratextTextCollection.open': (projectIds?: string[]) => Promise<string | undefined>;
+    'paratextBibleTextCollection.open': (projectIds?: string[]) => Promise<string | undefined>;
   }
 }

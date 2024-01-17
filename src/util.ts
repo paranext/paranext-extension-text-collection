@@ -1,5 +1,5 @@
 import { VerseRef } from '@sillsdev/scripture';
-import type { ProjectMetadata } from 'shared/models/project-metadata.model';
+import type { ProjectMetadata } from '@papi/core';
 
 export function getTextCollectionTitle(
   projectsMetadata: (ProjectMetadata | undefined)[],

@@ -1,7 +1,8 @@
 import papi from '@papi/frontend';
-import { useSetting, usePromise, useDialogCallback } from '@papi/frontend/react';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { IconButton, ScriptureReference } from 'papi-components';
+import { useSetting, useDialogCallback } from '@papi/frontend/react';
+import { Fragment, useCallback, useEffect, useMemo } from 'react';
+import { IconButton, ScriptureReference, usePromise } from 'platform-bible-react';
+import { deepEqual } from 'platform-bible-utils';
 import { VerseRef } from '@sillsdev/scripture';
 import { ProjectMetadata, WebViewProps } from '@papi/core';
 import { getTextCollectionTitle, getTextCollectionTooltip } from 'src/util';
@@ -68,7 +69,7 @@ globalThis.webViewComponent = function TextCollectionWebView({
       });
   }, [updateWebViewDefinition, projectsMetadata, verseRef]);
 
-  const [selectedProjectIds, selectProjects] = useDialogCallback(
+  const selectProjects = useDialogCallback(
     'platform.selectMultipleProjects',
     useMemo(
       () => ({
@@ -78,22 +79,18 @@ globalThis.webViewComponent = function TextCollectionWebView({
       }),
       [projectIds],
     ),
+    useCallback(
+      (selectedProjectIds) => {
+        // Update the selected project ids
+        if (
+          selectedProjectIds &&
+          !deepEqual([...selectedProjectIds].sort(), [...projectIds].sort())
+        )
+          setProjectIds(selectedProjectIds);
+      },
+      [projectIds, setProjectIds],
+    ),
   );
-
-  const [isLastActionCloseProject, setIsLastActionCloseProject] = useState<boolean>(false);
-  useEffect(() => {
-    setIsLastActionCloseProject(false);
-  }, [selectedProjectIds]);
-
-  // Add the newly selected project ID
-  useEffect(() => {
-    if (
-      selectedProjectIds &&
-      !isLastActionCloseProject &&
-      !papi.utils.deepEqual([...selectedProjectIds].sort(), [...projectIds].sort())
-    )
-      setProjectIds(selectedProjectIds);
-  }, [projectIds, setProjectIds, selectedProjectIds, isLastActionCloseProject]);
 
   const moveProjectUpDownHandler = (directionUp: boolean, projectId: string) => {
     const projectIdsCopy = [...projectIds];
@@ -114,7 +111,6 @@ globalThis.webViewComponent = function TextCollectionWebView({
       projectIdsCopy.splice(index, 1);
     }
     setProjectIds(projectIdsCopy);
-    setIsLastActionCloseProject(true);
   };
 
   const verseView = (
@@ -148,7 +144,7 @@ globalThis.webViewComponent = function TextCollectionWebView({
         label="Select projects"
         size="medium"
         className="select-projects-button"
-        onClick={selectProjects}
+        onClick={() => selectProjects()}
       >
         +
       </IconButton>
